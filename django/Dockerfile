@@ -9,6 +9,12 @@ COPY requirements.txt /app/
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Копируем Bash-скрипт в контейнер
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Делаем Bash-скрипт исполняемым
+RUN chmod +x /app/entrypoint.sh
+
 # Копирование проекта
 COPY . /app/
 
@@ -16,4 +22,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Команда для запуска приложения
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["./entrypoint.sh"]
