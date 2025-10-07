@@ -1,0 +1,12 @@
+FROM nginx:alpine
+
+COPY . /usr/share/nginx/html
+
+EXPOSE 80
+
+# docker build -t frog-p1 .
+# docker run -d -p 9164:80 --name frogs-p1 frog-p1
+# docker run -d -p 9166:80 -v ".\images:/usr/share/nginx/html/images" --name frogs-p1-mount frog-p1
+# docker volume create frog
+# docker run -d -p 9165:80 -v "frog:/usr/share/nginx/html/images" --name frogs-p1-volume frog-p1
+# docker cp ".\images\pimpkin.jpg" "c9b76fb87088:usr/share/nginx/html/images/pimplin.jpg"                                                   
