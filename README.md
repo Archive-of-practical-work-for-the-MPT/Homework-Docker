@@ -5,6 +5,8 @@
 
 1. [Практическая работа № 1 - Начало работы с Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker)
 2. [Практическая работа № 2 - Развертывание приложений в Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/compose)
+3. [Практическая работа № 3 - Развертывание приложения с обновлением данных](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/volumes-mounts)
+4. [Практическая работа № 4 - Развертывание оконных приложений в Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/xming11)
 
 # Практическая работа № 1 - Начало работы с Docker
 
