@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    volumes:
+      - mysql_data:/var/lib/mysql
+    container_name: mysql
+    hostname: mysql
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=online_shop
+      - TZ=Europe/Moscow
+    networks:
+      - monitoring_system
+
+volumes:
+  mysql_data:
+
+
+networks:
+  monitoring_system:
+    external: true

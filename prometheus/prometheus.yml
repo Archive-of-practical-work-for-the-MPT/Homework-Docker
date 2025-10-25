@@ -1,0 +1,6 @@
+scrape_configs:
+  # - job_name: 'django'
+  #   scrape_interval: 15s
+  #   metricks_path: /prometheus/metricks
+  #   static_configs:
+  #     -target: ['host.docker.internal:8000']
