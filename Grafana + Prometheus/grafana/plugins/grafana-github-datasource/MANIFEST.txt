@@ -1,0 +1,35 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "grafana",
+  "signedByOrg": "grafana",
+  "signedByOrgName": "Grafana Labs",
+  "plugin": "grafana-github-datasource",
+  "version": "2.3.0",
+  "time": 1759762880377,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "go_plugin_build_manifest": "6af3dfaea5920c663451508500f88792f56d5b6b2c6fb871f543c362583606ec",
+    "LICENSE": "999586dd584b63588e7c6b763e6adb530a92a1a9e4c1dd811fa6b7ce66d7b255",
+    "CHANGELOG.md": "a5bc50f221033fbfcc034f574e30dd3c8319a38e6e01c65a5333e99ce6e5f7f2",
+    "plugin.json": "f054c63110acae63a43fe5ecd96810684a380393e15c6e7372cd1530e51730f9",
+    "gpx_github_linux_amd64": "8f015adcd6f50cda37dd24a782c0ef693401f1eed454e3487b86ca61494bb1a7",
+    "dashboards/dashboard.json": "0f9e2c91689fc03517e612d9bdf45ccaaa1462bcbb6519fc6ebcf8e14b845444",
+    "img/github.svg": "757f2e5c9788fac452ccf86c02242c7b73faba967c7713443074603f86d26432",
+    "module.js": "904d840107b03e71af86bdfc6e2307ce13fcfcd9656ecb812598727eabb192ca",
+    "README.md": "0046270f3356ba524a0affc13d82bae46edadcfc546e4d8e8f9a7e26407c1662",
+    "module.js.map": "629332e9a10645c0651e8709163a44061790fdd2ecf4a65c6eb421a8de760b9b"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+
+wsA9BAETCgBtBYJo49nACZB+TQxqcIhm50UUAAAAAAAcACBzYWx0QG5vdGF0
+aW9ucy5vcGVucGdwanMub3Jnc3N8y1LaFifOzbgI8p+L5MWiMREleTZyUFFO
+/X9tTDcWIQTzOyW2kQdOhGNlcPN+TQxqcIhm5wAAYcMCCMT8zsluF3P7IVhW
+mO3p3Ysra5MWf//ynmSYIZWGqRLKFQHvTwADQH4ijWoeBbBa2AfjBdu6nGUq
+NPgjHKVqUiGRAgY3i2irYXq9WA2Qtnz+8bKpKt8rKf1hZwiMMD/OQkXCZ4XM
+1qFtHcVrYrl6Q45UGxSE5KyYaEFy+a2Luhhi6N9xeQ==
+=+9H/
+-----END PGP SIGNATURE-----
