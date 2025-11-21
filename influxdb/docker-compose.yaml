@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  influx-db:
+    image: influxdb:latest
+    container_name: influx-db
+    restart: always
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - etc_influxdb_data:/etc/influxdb2
+    environment:
+      - TZ=Europe/Moscow
+    networks:
+      - monitoring_system
+
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    restart: always
+    networks:
+      - monitoring_system
+    depends_on:
+      - influx-db
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/rootfs/sys:ro
+      - /proc:/rootfs/proc:ro
+      - /etc:/rootfs/etc:ro
+    environment:
+      - TZ=Europe/Moscow
+      - HOST_PROC=rootfs/proc
+      - HOST_SYS=rootfs/sys
+      - HOST_ETC=rootfs/etc
+    privileged: true
+
+volumes:
+  influxdb_data:
+  etc_influxdb_data:
+
+
+networks:
+  monitoring_system:
+    external: true
+
+# docker network ls
+# _pOGra7II5cypxk5XxWvOwLHDjSlADOwAGXKRPJzsKgtJcvvhNyMIkHZDRiVel4ACX-IU5C3PF2W4IhwdmXPTQ==
+
