@@ -7,6 +7,13 @@
 2. [Практическая работа № 2 - Развертывание приложений в Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/compose)
 3. [Практическая работа № 3 - Развертывание приложения с обновлением данных](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/volumes-mounts)
 4. [Практическая работа № 4 - Развертывание оконных приложений в Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/xming11)
+5. Практическая работа № 5 - Настройка мониторинга событий системы и их дальнейшая визуализация с использованием Grafana
+6. [Практическая работа № 6 - Настройка отслеживания базы данных с помощью локально развернутой в Docker Grafana](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/localgrafana)
+7. [Практическая работа № 7 - Отслеживания метирик с собственного приложения](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/metricscustom)
+8. Практическая работа № 8 - Настройка мониторинга событий
+9. [Практическая работа № 9 - Работа с InfluxDB](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/influxdb)
+
+Доп: [Практическая работа № Дополнительная - Развернуть WPF приложение внутри Docker контейнера](https://github.com/Merrcurys/WPF-Docker-Example)   
 
 # Практическая работа № 1 - Начало работы с Docker
 
