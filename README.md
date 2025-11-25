@@ -22,7 +22,7 @@ X11-apps
 <p align="center">
       <img src="https://github.com/user-attachments/assets/37a20a52-a412-4d76-8027-97f22f283a71" alt="Лекция" width="600">
 </p>
-Booker Tracker
+Book Tracker
 <p align="center">
       <img src="https://github.com/user-attachments/assets/25841ad9-aa41-420f-88a3-6957adb19574" alt="Django" width="700">
 </p>
