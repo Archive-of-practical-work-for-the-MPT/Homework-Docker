@@ -13,7 +13,7 @@
 8. Практическая работа № 8 - Настройка мониторинга событий
 9. [Практическая работа № 9 - Работа с InfluxDB](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/influxdb)
 
-Доп: [Практическая работа № Дополнительная - Развернуть WPF приложение внутри Docker контейнера](https://github.com/Merrcurys/WPF-Docker-Example)   
+Доп: [Практическая работа № Дополнительная - Развернуть WPF приложение внутри Docker контейнера](https://github.com/Archive-of-practical-work-for-the-MPT/WPF-Docker-Example)   
 
 # Практическая работа № 1 - Начало работы с Docker
 
