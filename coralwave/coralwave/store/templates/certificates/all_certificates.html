@@ -1,0 +1,398 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Все сертификаты - CoralWave</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/info.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .certificates-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 20px;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .page-title {
+        font-size: 36px;
+        color: #2c3e50;
+        margin-bottom: 15px;
+      }
+
+      .page-subtitle {
+        color: #7f8c8d;
+        font-size: 18px;
+      }
+
+      .certificates-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+      }
+
+      .certificate-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .certificate-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .certificate-img {
+        height: 250px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .certificate-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .certificate-card:hover .certificate-img img {
+        transform: scale(1.05);
+      }
+
+      .certificate-content {
+        padding: 25px;
+      }
+
+      .certificate-id {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .certificate-id i {
+        margin-right: 8px;
+        color: #3498db;
+      }
+
+      .certificate-title {
+        font-size: 22px;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .certificate-description {
+        color: #7f8c8d;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .certificate-price {
+        font-size: 24px;
+        font-weight: 700;
+        color: #27ae60;
+        margin-bottom: 20px;
+      }
+
+      .btn-purchase {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+      }
+
+      .btn-purchase:hover {
+        background: linear-gradient(135deg, #2980b9, #1f5f8b);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      }
+
+      .no-certificates {
+        text-align: center;
+        padding: 100px 20px;
+        color: #7f8c8d;
+      }
+
+      .no-certificates-icon {
+        font-size: 80px;
+        color: #bdc3c7;
+        margin-bottom: 20px;
+      }
+
+      .no-certificates h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 15px;
+      }
+
+      .no-certificates p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .back-to-home {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .back-to-home a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      .back-to-home a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .certificates-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .page-title {
+          font-size: 28px;
+        }
+
+        .certificate-content {
+          padding: 20px;
+        }
+
+        .search-input-group {
+          flex-direction: column;
+        }
+
+        .search-input {
+          padding: 12px 15px;
+          border-bottom: 1px solid #ecf0f1;
+        }
+
+        .search-button {
+          padding: 12px;
+          width: 45px;
+          height: 45px;
+        }
+
+        .search-results-info {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+      }
+
+      .search-section {
+        margin-bottom: 40px;
+      }
+
+      .search-form {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .search-input-group {
+        display: flex;
+        overflow: hidden;
+      }
+
+      .search-input {
+        flex: 1;
+        border: 2px solid #ecf0f1;
+        padding: 15px 20px;
+        font-size: 16px;
+        outline: none;
+        background: white;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: border-color 0.3s ease;
+      }
+
+      .search-input:focus {
+        border-color: #3498db;
+      }
+
+      .search-input::placeholder {
+        color: #bdc3c7;
+      }
+
+      .search-button {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .search-button:hover {
+        background: linear-gradient(135deg, #2980b9, #1f5f8b);
+      }
+
+      .search-results-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background: #ecf0f1;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+
+      .search-results-info span {
+        color: #2c3e50;
+        font-weight: 500;
+      }
+
+      .clear-search {
+        color: #e74c3c;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .clear-search:hover {
+        color: #c0392b;
+      }
+    </style>
+  </head>
+  <body>
+    {% include '_inc/_header.html' with header_type='info' %}
+
+    <div class="certificates-container">
+      <div class="page-header">
+        <h1 class="page-title">
+          <i class="fas fa-certificate"></i> Все сертификаты
+        </h1>
+        <p class="page-subtitle">
+          Выберите сертификат на коралл и внесите свой вклад в сохранение
+          Большого Барьерного рифа
+        </p>
+      </div>
+
+      <!-- Форма поиска -->
+      <div class="search-section">
+        <form method="get" class="search-form">
+          <div class="search-input-group">
+            <input
+              type="text"
+              name="search"
+              value="{{ search_query }}"
+              placeholder="Поиск по названию сертификата..."
+              class="search-input"
+            />
+            <button type="submit" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          {% if search_query %}
+          <div class="search-results-info">
+            <span>Найдено сертификатов: {{ certificate_types|length }}</span>
+            <a href="{% url 'all_certificates' %}" class="clear-search">
+              <i class="fas fa-times"></i> Очистить поиск
+            </a>
+          </div>
+          {% endif %}
+        </form>
+      </div>
+
+      {% if certificate_types %}
+      <div class="certificates-grid">
+        {% for certificate_type in certificate_types %}
+        <div class="certificate-card">
+          <div class="certificate-img">
+            {% if "розовый" in certificate_type.name|lower or "pink" in certificate_type.name|lower %}
+            <img
+              src="https://images.unsplash.com/photo-1560275619-4cc5fa59d3ae?ixlib=rb-4.0.3"
+              alt="{{ certificate_type.name }}"
+            />
+            {% elif "голубой" in certificate_type.name|lower or "blue" in certificate_type.name|lower %}
+            <img
+              src="https://images.unsplash.com/photo-1551244072-5d12893278ab?ixlib=rb-4.0.3"
+              alt="{{ certificate_type.name }}"
+            />
+            {% elif "оранжевый" in certificate_type.name|lower or "orange" in certificate_type.name|lower %}
+            <img
+              src="https://images.unsplash.com/photo-1513039235271-5937eefe2959?ixlib=rb-4.0.3"
+              alt="{{ certificate_type.name }}"
+            />
+            {% else %}
+            <img
+              src="https://images.unsplash.com/photo-1560275619-4cc5fa59d3ae?ixlib=rb-4.0.3"
+              alt="{{ certificate_type.name }}"
+            />
+            {% endif %}
+          </div>
+          <div class="certificate-content">
+            <h3 class="certificate-title">{{ certificate_type.name }}</h3>
+            <div class="certificate-price">
+              {% if certificate_type.price %} {{ certificate_type.price }} ₽ {% else %} Цена по запросу {% endif %}
+            </div>
+            <a
+              href="{% url 'purchase_certificate' 'custom' %}"
+              class="btn-purchase"
+            >
+              <i class="fas fa-shopping-cart"></i> Оформить сертификат
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="no-certificates">
+        <div class="no-certificates-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h2>Сертификаты не найдены</h2>
+        <p>
+          В данный момент в базе данных нет доступных сертификатов.<br />
+          Пожалуйста, обратитесь к администратору для добавления сертификатов.
+        </p>
+      </div>
+      {% endif %}
+
+      <div class="back-to-home">
+        <a href="{% url 'home' %}">
+          <i class="fas fa-arrow-left"></i> Вернуться на главную
+        </a>
+      </div>
+    </div>
+
+    {% include '_inc/_footer.html' with footer_type='info' %}
+  </body>
+</html>

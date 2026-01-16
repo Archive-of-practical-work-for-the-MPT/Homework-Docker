@@ -1,0 +1,67 @@
+{% if footer_type == 'info' %}
+<footer id="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3><i class="fas fa-coral"></i> CoralWave</h3>
+      <p>Сохраняем коралловые рифы Австралии вместе с вами с 2022 года.</p>
+    </div>
+    <div class="footer-section">
+      <h3><i class="fas fa-compass"></i> Навигация</h3>
+      <ul>
+        <li><a href="#">Главная</a></li>
+        <li><a href="#certificates">Сертификаты</a></li>
+        <li><a href="#about">О проекте</a></li>
+        <li><a href="#footer">Контакты</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3><i class="fas fa-envelope"></i> Контакты</h3>
+      <ul>
+        <li><i class="fas fa-phone"></i> +7 (999) 123-45-67</li>
+        <li><i class="fas fa-envelope"></i> info@coralwave.com</li>
+      </ul>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>&copy; 2025 CoralWave. Все права защищены.</p>
+  </div>
+</footer>
+{% else %}
+<footer class="footer mt-auto py-3 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>Навигация</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'info_view' %}">Главная</a></li>
+          <li><a href="{% url 'certificates_list' %}">Сертификаты</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Контакты</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-phone me-2"></i>+7 (999) 123-45-67</li>
+          <li><i class="fas fa-envelope me-2"></i>info@coralwave.com</li>
+          <li>
+            <i class="fas fa-map-marker-alt me-2"></i>г. Москва, ул. Примерная,
+            123
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Мы в соцсетях</h5>
+        <div class="social-links">
+          <a href="#" class="me-2"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="text-center">
+      <p class="mb-0">&copy; 2024 CoralWave. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
+{% endif %}

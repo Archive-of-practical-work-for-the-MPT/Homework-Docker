@@ -1,0 +1,39 @@
+{% extends 'base.html' %}{% block title %}Регистрация{% endblock %}{% block content %}
+<div
+  style="
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--light-color);
+  "
+>
+  <div
+    style="
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      padding: 2.5em 2em 2em 2em;
+      max-width: 400px;
+      width: 100%;
+      margin: auto;
+    "
+  >
+    <div style="text-align: center; margin-bottom: 1.5em">
+      <i class="fas fa-user-plus fa-2x" style="color: var(--primary-color)"></i>
+      <h2 style="margin: 0; font-size: 2em; color: var(--primary-color)">
+        Регистрация
+      </h2>
+    </div>
+    <form method="post">
+      {% csrf_token %}{{ form.as_p }}
+      <button type="submit" class="btn btn-primary w-100">
+        Зарегистрироваться
+      </button>
+    </form>
+    <p class="mt-3 text-center">
+      У вас уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

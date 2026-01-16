@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoralWave - Сертификаты на кораллы Большого Барьерного рифа</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/info.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    {% include '_inc/_header.html' with header_type='info' %}
+
+    <section class="hero">
+      <div class="hero-content">
+        <h2>Станьте хранителем<br />кораллового рифа</h2>
+        <p>
+          Сохраняем красоту и биоразнообразие Большого Барьерного рифа вместе с
+          вами. Приобретите именной сертификат на коралл и внесите свой вклад в
+          сохранение морской экосистемы нашей планеты.
+        </p>
+        <a href="#certificates" class="btn"
+          ><i class="fas fa-arrow-right"></i> Выбрать сертификат</a
+        >
+      </div>
+    </section>
+
+    <div class="container" id="certificates">
+      <h2 class="section-title">Сертификаты на кораллы</h2>
+      <div class="certificate-grid">
+        <div class="certificate-card">
+          <div class="certificate-img">
+            <img
+              src="https://images.unsplash.com/photo-1560275619-4cc5fa59d3ae?ixlib=rb-4.0.3"
+              alt="Розовый коралл"
+            />
+          </div>
+          <div class="certificate-content">
+            <span class="coral-id"
+              ><i class="fas fa-tag"></i> ID: AUS-GBR-2023-P001</span
+            >
+            <h3>Розовый ветвистый коралл</h3>
+            <p>
+              Сертификат на коралл розового цвета в северной части Большого
+              Барьерного рифа. Включает именной сертификат и ежемесячные
+              обновления о состоянии вашего коралла.
+            </p>
+            <span class="price">5 000 ₽</span>
+            <a href="{% url 'purchase_certificate' 'pink' %}" class="btn">
+              <i class="fas fa-shopping-cart"></i> Оформить сертификат
+            </a>
+          </div>
+        </div>
+
+        <div class="certificate-card">
+          <div class="certificate-img">
+            <img
+              src="https://images.unsplash.com/photo-1551244072-5d12893278ab?ixlib=rb-4.0.3"
+              alt="Голубой коралл"
+            />
+          </div>
+          <div class="certificate-content">
+            <span class="coral-id"
+              ><i class="fas fa-tag"></i> ID: AUS-GBR-2023-B042</span
+            >
+            <h3>Голубой мозговой коралл</h3>
+            <p>
+              Сертификат на редкий голубой мозговой коралл в центральной части
+              Большого Барьерного рифа. Включает именной сертификат, фото вашего
+              коралла и GPS-координаты.
+            </p>
+            <span class="price">7 500 ₽</span>
+            <a href="{% url 'purchase_certificate' 'blue' %}" class="btn">
+              <i class="fas fa-shopping-cart"></i> Оформить сертификат
+            </a>
+          </div>
+        </div>
+
+        <div class="certificate-card">
+          <div class="certificate-img">
+            <img
+              src="https://images.unsplash.com/photo-1513039235271-5937eefe2959?ixlib=rb-4.0.3"
+              alt="Оранжевый коралл"
+            />
+          </div>
+          <div class="certificate-content">
+            <span class="coral-id"
+              ><i class="fas fa-tag"></i> ID: AUS-GBR-2023-O118</span
+            >
+            <h3>Оранжевый веерный коралл</h3>
+            <p>
+              Сертификат на яркий оранжевый веерный коралл в южной части
+              Большого Барьерного рифа. Включает именной сертификат и видео
+              вашего коралла в естественной среде.
+            </p>
+            <span class="price">6 200 ₽</span>
+            <a href="{% url 'purchase_certificate' 'orange' %}" class="btn">
+              <i class="fas fa-shopping-cart"></i> Оформить сертификат
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="features">
+      <div class="container">
+        <h2 class="section-title">Преимущества нашего проекта</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-water"></i></div>
+            <h3>Реальный вклад</h3>
+            <p>
+              100% средств направляются на программы сохранения и восстановления
+              коралловых рифов Австралии
+            </p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-search"></i></div>
+            <h3>Полная прозрачность</h3>
+            <p>
+              Вы получаете точные GPS-координаты и регулярные обновления о
+              состоянии вашего коралла
+            </p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-gift"></i></div>
+            <h3>Уникальный подарок</h3>
+            <p>
+              Именной сертификат станет необычным и запоминающимся подарком для
+              ваших близких
+            </p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-globe"></i></div>
+            <h3>Глобальное сообщество</h3>
+            <p>
+              Присоединяйтесь к международному сообществу хранителей коралловых
+              рифов
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container">
+        <h2 class="section-title" style="color: white">О нашем проекте</h2>
+        <div class="about-content">
+          <p>
+            Проект CoralWave был основан в 2022 году группой энтузиастов и
+            морских биологов с целью сохранения уникальной экосистемы Большого
+            Барьерного рифа Австралии. Мы сотрудничаем с ведущими научными
+            институтами и природоохранными организациями.
+          </p>
+          <p>
+            Приобретая сертификат на коралл, вы финансируете программы по
+            мониторингу, защите и восстановлению коралловых рифов, которые
+            находятся под угрозой из-за изменения климата и других антропогенных
+            факторов.
+          </p>
+          <a href="#" class="btn"
+            ><i class="fas fa-arrow-right"></i> Узнать больше</a
+          >
+        </div>
+      </div>
+    </section>
+
+    {% include '_inc/_footer.html' with footer_type='info' %}
+  </body>
+</html>

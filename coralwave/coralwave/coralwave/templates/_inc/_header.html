@@ -1,0 +1,78 @@
+{% load static %} {% if header_type == 'info' %}
+<nav>
+  <span class="nav-logo">CoralWave</span>
+  <div class="nav-links">
+    <a href="{% url 'info_view' %}"><i class="fas fa-home"></i> Главная</a>
+    <a href="{% url 'all_certificates' %}"
+      ><i class="fas fa-certificate"></i> Сертификаты</a
+    >
+    <a href="{% url 'info_view' %}#about"
+      ><i class="fas fa-info-circle"></i> О проекте</a
+    >
+    <a href="{% url 'info_view' %}#footer"
+      ><i class="fas fa-envelope"></i> Контакты</a
+    >
+    {% if not request.session.account_id %}
+    <a href="{% url 'register' %}" title="Регистрация"
+      ><i class="fas fa-user-plus"></i
+    ></a>
+    {% else %}
+    <a href="{% url 'profile' %}" title="Аккаунт"
+      ><i class="fas fa-user"></i
+    ></a>
+    <a href="{% url 'logout' %}" title="Выйти"
+      ><i class="fas fa-sign-out-alt"></i
+    ></a>
+    {% endif %}
+  </div>
+</nav>
+{% else %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'info_view' %}">
+      <i class="fas fa-water me-2"></i>CoralWave
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'info_view' %}">
+            <i class="fas fa-home me-1"></i>Главная
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'certificates_list' %}">
+            <i class="fas fa-certificate me-1"></i>Сертификаты
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'account_list' %}">
+            <i class="fas fa-users me-1"></i>Аккаунты
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        {% if request.session.account_id %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}" title="Аккаунт">
+            <i class="fas fa-user"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}" title="Выйти">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endif %}

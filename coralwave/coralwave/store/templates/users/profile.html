@@ -1,0 +1,91 @@
+{% extends 'base.html' %}{% block title %}Профиль{% endblock %}{% block content %}
+<div
+  style="
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--light-color);
+  "
+>
+  <div
+    style="
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      padding: 2.5em 2em 2em 2em;
+      max-width: 420px;
+      width: 100%;
+      margin: auto;
+      text-align: center;
+    "
+  >
+    <div style="margin-bottom: 1em">
+      <i
+        class="fas fa-user-circle fa-5x"
+        style="color: var(--primary-color)"
+      ></i>
+    </div>
+    <h2
+      style="font-size: 1.7em; color: var(--primary-color); margin-bottom: 1em"
+    >
+      Профиль пользователя
+    </h2>
+    <ul style="list-style: none; padding: 0; margin: 0; text-align: left">
+      <li
+        style="
+          margin-bottom: 1em;
+          font-size: 1.1em;
+          display: flex;
+          justify-content: space-between;
+        "
+      >
+        <span>Имя:</span> <span>{{ user.name }}</span>
+      </li>
+      <li
+        style="
+          margin-bottom: 1em;
+          font-size: 1.1em;
+          display: flex;
+          justify-content: space-between;
+        "
+      >
+        <span>Фамилия:</span> <span>{{ user.lastname }}</span>
+      </li>
+      <li
+        style="
+          margin-bottom: 1em;
+          font-size: 1.1em;
+          display: flex;
+          justify-content: space-between;
+        "
+      >
+        <span>Email:</span> <span>{{ user.email }}</span>
+      </li>
+      <li
+        style="
+          margin-bottom: 1em;
+          font-size: 1.1em;
+          display: flex;
+          justify-content: space-between;
+        "
+      >
+        <span>Роль:</span>
+        <span style="color: var(--accent-color); font-weight: bold"
+          >{{ user.id_role.name }}</span
+        >
+      </li>
+      <li
+        style="
+          margin-bottom: 1em;
+          font-size: 1.1em;
+          display: flex;
+          justify-content: space-between;
+        "
+      >
+        <span>Логин:</span> <span>{{ user.id_account.login }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

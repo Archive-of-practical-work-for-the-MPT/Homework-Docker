@@ -1,0 +1,7 @@
+locust==2.43.1
+Faker==40.1.2
+pillow==12.1.0
+
+# pip install locust
+# pip install faker
+# pip install PillowAAA

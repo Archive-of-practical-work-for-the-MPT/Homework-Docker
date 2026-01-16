@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      CoralWave - {% if form.instance.id_account %}Редактирование{% else
+      %}Создание{% endif %} аккаунта
+    </title>
+    <link rel="stylesheet" href="{% static 'css/info.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    {% include '_inc/_header.html' with header_type='info' %}
+
+    <div class="container">
+      <h2 class="section-title">
+        {% if form.instance.id_account %}Редактирование{% else %}Создание{% endif %} аккаунта
+      </h2>
+
+      <div
+        class="form-container"
+        style="
+          max-width: 600px;
+          margin: 0 auto;
+          background: white;
+          padding: 2em;
+          border-radius: 15px;
+          box-shadow: var(--shadow);
+        "
+      >
+        <form method="post">
+          {% csrf_token %}
+          <div class="input-wrapper">
+            <label for="{{ form.login.id_for_label }}">
+              <i class="fas fa-user"></i>
+              Логин:
+            </label>
+            {{ form.login }} {% if form.login.errors %}
+            <div class="error-message">{{ form.login.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="input-wrapper">
+            <label for="{{ form.password.id_for_label }}">
+              <i class="fas fa-lock"></i>
+              Пароль:
+            </label>
+            {{ form.password }} {% if form.password.errors %}
+            <div class="error-message">{{ form.password.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn">
+              <i class="fas fa-save"></i> {% if form.instance.id_account%}Сохранить{% else %}Создать{% endif %}
+            </button>
+            <a href="{% url 'account_list' %}" class="btn cancel">
+              <i class="fas fa-times"></i> Отмена
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {% include '_inc/_footer.html' with footer_type='info' %}
+  </body>
+</html>

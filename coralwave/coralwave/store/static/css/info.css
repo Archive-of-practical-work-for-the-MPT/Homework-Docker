@@ -1,0 +1,194 @@
+nav .nav-logo {
+    background: none;
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: initial;
+    color: white;
+    transform: none !important;
+}
+
+nav .nav-logo:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('https://images.unsplash.com/photo-1560275619-4cc5fa59d3ae?ixlib=rb-4.0.3') center/cover;
+    color: white;
+    text-align: center;
+    padding: 8em 2em;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h2 {
+    font-size: 3em;
+    margin-bottom: 1em;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+    line-height: 1.6;
+}
+
+.certificate-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.certificate-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.certificate-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.certificate-img {
+    height: 200px;
+    overflow: hidden;
+}
+
+.certificate-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.certificate-card:hover .certificate-img img {
+    transform: scale(1.1);
+}
+
+.certificate-content {
+    padding: 1.5em;
+}
+
+.coral-id {
+    color: #006d77;
+    font-size: 0.9em;
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+.certificate-content h3 {
+    color: #2b2d42;
+    margin: 0.5em 0;
+    font-size: 1.3em;
+}
+
+.certificate-content p {
+    color: #666;
+    margin-bottom: 1.5em;
+    line-height: 1.6;
+}
+
+.price {
+    display: block;
+    font-size: 1.5em;
+    color: #006d77;
+    font-weight: 600;
+    margin-bottom: 1em;
+}
+
+.features {
+    background: #f8f9fa;
+    padding: 4em 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 2em;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: #006d77;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1em;
+    font-size: 1.5em;
+}
+
+.feature-item h3 {
+    color: #2b2d42;
+    margin-bottom: 1em;
+}
+
+.feature-item p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Стили для about секции */
+.about {
+    background: #006d77;
+    color: white;
+    padding: 4em 0;
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-content p {
+    margin-bottom: 1.5em;
+    line-height: 1.8;
+    font-size: 1.1em;
+}
+
+@media (max-width: 1200px) {
+    .certificate-grid,
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h2 {
+        font-size: 2em;
+    }
+
+    .certificate-grid,
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding: 4em 1em;
+    }
+}

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # База данных PostgreSQL
+  db:
+    image: postgres:15
+    container_name: coralwave_db
+    restart: always
+    environment:
+      POSTGRES_DB: CoralWave
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - coralwave_network
+
+  # Django приложение
+  web:
+    build: .
+    container_name: coralwave_app
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./coralwave:/app/coralwave
+      - static_volume:/app/coralwave/staticfiles
+    ports:
+      - "8000:8000"
+    networks:
+      - coralwave_network
+    command: >
+      sh -c "
+        python coralwave/manage.py makemigrations &&
+        python coralwave/manage.py migrate &&
+        python coralwave/manage.py collectstatic --noinput &&
+        python coralwave/manage.py runserver 0.0.0.0:8000
+      "
+
+volumes:
+  postgres_data:
+  static_volume:
+
+networks:
+  coralwave_network:
+    driver: bridge
