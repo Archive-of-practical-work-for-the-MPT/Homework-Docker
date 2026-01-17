@@ -3,6 +3,8 @@
 
 Навигация:
 
+1 семестр:
+
 1. [Практическая работа № 1 - Начало работы с Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker)
 2. [Практическая работа № 2 - Развертывание приложений в Docker](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/compose)
 3. [Практическая работа № 3 - Развертывание приложения с обновлением данных](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/volumes-mounts)
@@ -13,7 +15,12 @@
 8. Практическая работа № 8 - Настройка мониторинга событий
 9. [Практическая работа № 9 - Работа с InfluxDB](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/influxdb)
 
-Доп: [Практическая работа № Дополнительная - Развернуть WPF приложение внутри Docker контейнера](https://github.com/Archive-of-practical-work-for-the-MPT/WPF-Docker-Example)   
+Доп: [Практическая работа № Дополнительная - Развернуть WPF приложение внутри Docker контейнера](https://github.com/Archive-of-practical-work-for-the-MPT/WPF-Docker-Example)
+
+2 семестр:
+
+10. [Практическая работа №10 Нагрузочное тестирование приложения c фейковыми данными](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/locust)
+
 
 # Практическая работа № 1 - Начало работы с Docker
 
