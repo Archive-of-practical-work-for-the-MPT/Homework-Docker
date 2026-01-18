@@ -4,6 +4,10 @@
 
 В данной практической нужно научиться реализовывать нагрузочное тестирование с помощью Locust для нашего Web приложения и/или API. Я выбрал свой проект - [Django УП 3 курс](https://github.com/Archive-of-practical-work-for-the-MPT/Django-Educational-Practice), который был доработан Dockerfile'ом.
 
+В данном репозитории две папки:
+- locust_lection - лекция
+- coralwave - практическая работа
+
 ## Как сделать чтобы работало?
 - В setting.py настройки подключение к вашей БД
 - python -m venv .venv
