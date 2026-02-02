@@ -20,6 +20,7 @@
 2 семестр:
 
 10. [Практическая работа №10 Нагрузочное тестирование приложения c фейковыми данными](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/locust)
+11. [Практическая работа №11 Начало работы с Gitlab](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/gitlab)
 
 
 # Практическая работа № 1 - Начало работы с Docker
