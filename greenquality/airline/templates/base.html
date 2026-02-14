@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GreenQuality Airlines{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Шапка с эффектом мутного стекла -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="GreenQuality Airlines Logo" style="height: 40px; margin-right: 15px; vertical-align: middle;">
+                <h1 style="display: inline-block; vertical-align: middle;">GreenQuality Airlines</h1>
+            </div>
+            <nav class="navigation">
+                <ul>
+                    <li><a href="{% url 'index' %}">Главная</a></li>
+                    <li><a href="{% url 'about' %}">О нас</a></li>
+                    <li><a href="{% url 'flights' %}">Рейсы</a></li>
+                    <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                        {% if request.session.account_id %}
+                        <li><a href="{% url 'profile' %}">Профиль</a></li>
+                        {% if is_admin %}
+                            <li><a href="{% url 'admin_panel' %}">Панель</a></li>
+                        {% elif is_manager %}
+                            <li><a href="{% url 'manager_panel' %}">Панель</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Вход</a></li>
+                        <li><a href="{% url 'register' %}">Регистрация</a></li>
+                    {% endif %}
+                    <li>
+                        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+                            <span class="theme-toggle-icon" id="themeIcon">🌙</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Окошко согласия с политикой (только при первом заходе) -->
+    <div id="privacy-consent-banner" class="privacy-consent-banner" role="dialog" aria-label="Согласие на обработку персональных данных" style="display: none;">
+        <div class="privacy-consent-content">
+            <p class="privacy-consent-text">Мы используем файлы cookie и обрабатываем персональные данные в соответствии с нашей <a href="{% url 'privacy' %}" target="_blank">политикой обработки персональных данных</a>. Продолжая использовать сайт, вы соглашаетесь с этими условиями.</p>
+            <div class="privacy-consent-actions">
+                <a href="{% url 'privacy' %}" class="privacy-consent-link" target="_blank">Политика конфиденциальности</a>
+                <button type="button" class="privacy-consent-btn" id="privacyConsentBtn">Согласиться</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основное содержимое -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GreenQuality Airlines</h3>
+                    <p>Ваш надежный партнер в мире воздушных путешествий.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Email: info@greenquality.ru</p>
+                    <p>Телефон: +7 (495) 123-45-67</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Следите за нами</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">VK</a>
+                        <a href="#" class="social-icon">Telegram</a>
+                        <a href="#" class="social-icon">MAX</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025–2026 GreenQuality Airlines. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript для интерактивных элементов -->
+    <script>
+        // Карусель
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            
+            currentSlide = (n + slides.length) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // Инициализация карусели
+        if (slides.length > 0) {
+            slides[0].classList.add('active');
+            if (indicators.length > 0) {
+                indicators[0].classList.add('active');
+            }
+            
+            // Автоматическая смена слайдов каждые 5 секунд
+            setInterval(nextSlide, 5000);
+        }
+        
+        // FAQ интерактив
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    question.classList.toggle('active');
+                    answer.classList.toggle('open');
+                });
+            });
+        });
+        
+        // Переключение темы
+        (function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const html = document.documentElement;
+            
+            // Загружаем сохраненную тему из localStorage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '🌙';
+            }
+            
+            // Обработчик переключения темы
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Обновляем иконку
+                themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            });
+        })();
+
+        // Глобальные горячие клавиши
+        (function() {
+            window.APP_URLS = {
+                index: "{% url 'index' %}",
+                about: "{% url 'about' %}",
+                flights: "{% url 'flights' %}",
+                contacts: "{% url 'contacts' %}",
+                privacy: "{% url 'privacy' %}",
+                profile: "{% url 'profile' %}",
+                admin_panel: "{% url 'admin_panel' %}",
+                manager_panel: "{% url 'manager_panel' %}",
+                reports: "{% url 'reports' %}",
+                export_csv: "{% url 'export_statistics' 'csv' %}",
+                export_pdf: "{% url 'export_statistics' 'pdf' %}",
+                login: "{% url 'login' %}",
+                logout: "{% url 'logout' %}"
+            };
+            window.APP_USER = {
+                is_authenticated: {{ is_authenticated|yesno:"true,false" }},
+                is_admin: {{ is_admin|yesno:"true,false" }},
+                is_manager: {{ is_manager|yesno:"true,false" }}
+            };
+
+            document.addEventListener('keydown', function(e) {
+                // Игнорируем, если фокус в поле ввода (кроме Escape и F1)
+                const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+                const inInput = tag === 'input' || tag === 'textarea' || tag === 'select';
+                if (inInput && e.key !== 'Escape' && e.key !== 'F1') return;
+
+                const ctrl = e.ctrlKey;
+                const shift = e.shiftKey;
+                const alt = e.altKey;
+                const key = e.key.toUpperCase();
+
+                // F1 — подсказка по горячим клавишам; Escape — закрыть подсказку
+                if (e.key === 'F1') {
+                    e.preventDefault();
+                    var hint = document.getElementById('hotkeys-hint');
+                    if (hint) hint.classList.toggle('hotkeys-hint-visible');
+                    return;
+                }
+                if (e.key === 'Escape') {
+                    var hint = document.getElementById('hotkeys-hint');
+                    if (hint) hint.classList.remove('hotkeys-hint-visible');
+                    return;
+                }
+
+                // Ctrl+Shift+O — переключение темы
+                if (ctrl && shift && key === 'O') {
+                    e.preventDefault();
+                    document.getElementById('themeToggle') && document.getElementById('themeToggle').click();
+                    return;
+                }
+
+                // Ctrl+Shift+H — главная
+                if (ctrl && shift && key === 'H') {
+                    e.preventDefault();
+                    window.location.href = APP_URLS.index;
+                    return;
+                }
+
+                // Ctrl+Shift+F — рейсы
+                if (ctrl && shift && key === 'F') {
+                    e.preventDefault();
+                    window.location.href = APP_URLS.flights;
+                    return;
+                }
+
+                // Ctrl+Shift+P — профиль (если авторизован)
+                if (ctrl && shift && key === 'P') {
+                    e.preventDefault();
+                    if (APP_USER.is_authenticated) {
+                        window.location.href = APP_URLS.profile;
+                    }
+                    return;
+                }
+
+                // Ctrl+Shift+A — админ-панель (только для админов)
+                if (ctrl && shift && key === 'A') {
+                    e.preventDefault();
+                    if (APP_USER.is_admin) {
+                        window.location.href = APP_URLS.admin_panel;
+                    }
+                    return;
+                }
+
+                // Ctrl+Shift+M — панель менеджера (только для менеджеров)
+                if (ctrl && shift && key === 'M') {
+                    e.preventDefault();
+                    if (APP_USER.is_manager) {
+                        window.location.href = APP_URLS.manager_panel;
+                    }
+                    return;
+                }
+
+                // Ctrl+Shift+E — экспорт CSV (только для менеджеров)
+                if (ctrl && shift && key === 'E') {
+                    e.preventDefault();
+                    if (APP_USER.is_manager) {
+                        window.location.href = APP_URLS.export_csv;
+                    }
+                    return;
+                }
+
+                // Ctrl+Shift+L — выход (если авторизован)
+                if (ctrl && shift && key === 'L') {
+                    e.preventDefault();
+                    if (APP_USER.is_authenticated) {
+                        window.location.href = APP_URLS.logout;
+                    }
+                    return;
+                }
+            });
+        })();
+    </script>
+    <!-- Подсказка по горячим клавишам (F1) -->
+    <div id="hotkeys-hint" class="hotkeys-hint" aria-hidden="true" onclick="if(event.target===this) this.classList.remove('hotkeys-hint-visible')">
+        <div class="hotkeys-hint-content" onclick="event.stopPropagation()">
+            <button type="button" class="hotkeys-hint-close" onclick="document.getElementById('hotkeys-hint').classList.remove('hotkeys-hint-visible')" aria-label="Закрыть">×</button>
+            <h3>Горячие клавиши</h3>
+            <ul class="hotkeys-list">
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> — Главная</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> — Рейсы</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> — Профиль</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd> — Админ-панель</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> — Панель менеджера</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> — Экспорт (CSV, для менеджеров)</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> — Выход</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd> — Тема (светлая/тёмная)</li>
+                <li><kbd>F1</kbd> — эта подсказка</li>
+            </ul>
+        </div>
+    </div>
+    <style>
+        .hotkeys-hint { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
+        .hotkeys-hint.hotkeys-hint-visible { opacity: 1; visibility: visible; }
+        .hotkeys-hint-content { background: var(--bg-color, #fff); border-radius: 16px; padding: 24px 32px; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; }
+        .hotkeys-hint-close { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted, #666); line-height: 1; }
+        .hotkeys-hint-close:hover { color: var(--text-secondary, #333); }
+        .hotkeys-hint h3 { margin: 0 0 16px 0; color: var(--text-secondary, #2c3e50); font-size: 20px; }
+        .hotkeys-list { list-style: none; padding: 0; margin: 0; }
+        .hotkeys-list li { padding: 6px 0; color: var(--text-secondary, #2c3e50); font-size: 14px; }
+        .hotkeys-list kbd { display: inline-block; padding: 2px 8px; background: var(--bg-secondary, #f0f0f0); border-radius: 6px; font-family: inherit; font-size: 12px; margin: 0 2px; }
+    </style>
+    <!-- Стили окошка согласия с политикой (первый заход) -->
+    <style>
+        .privacy-consent-banner { position: fixed; bottom: 20px; left: 20px; z-index: 9998; max-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); border-radius: 20px; overflow: hidden; animation: privacy-banner-in 0.35s ease; }
+        .privacy-consent-banner.privacy-consent-hidden { display: none !important; }
+        @keyframes privacy-banner-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .privacy-consent-content { background: var(--bg-color, #fff); border: 2px solid #0bda51; padding: 20px; border-radius: 18px; }
+        .privacy-consent-text { margin: 0 0 14px 0; font-size: 14px; line-height: 1.55; color: var(--text-secondary, #2c3e50); }
+        .privacy-consent-text a { color: #0bda51; text-decoration: underline; }
+        .privacy-consent-text a:hover { color: #08a53d; }
+        .privacy-consent-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .privacy-consent-link { font-size: 13px; color: #0bda51; text-decoration: none; }
+        .privacy-consent-link:hover { text-decoration: underline; }
+        .privacy-consent-btn { background: linear-gradient(135deg, #0bda51, #08a53d); color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .privacy-consent-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(11, 218, 81, 0.4); }
+    </style>
+    <script>
+        (function() {
+            var banner = document.getElementById('privacy-consent-banner');
+            var btn = document.getElementById('privacyConsentBtn');
+            if (!banner || !btn) return;
+            if (localStorage.getItem('privacy_consent') === '1') return;
+            banner.style.display = 'block';
+            btn.addEventListener('click', function() {
+                localStorage.setItem('privacy_consent', '1');
+                banner.classList.add('privacy-consent-hidden');
+                banner.style.display = 'none';
+            });
+        })();
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

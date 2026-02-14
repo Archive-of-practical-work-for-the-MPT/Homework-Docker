@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('about/', views.about, name='about'),
+    path('contacts/', views.contacts, name='contacts'),
+    path('privacy/', views.privacy, name='privacy'),
+    path('flights/', views.flights, name='flights'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('logout/', views.logout_view, name='logout'),
+    path('profile/', views.profile_view, name='profile'),
+    path('buy-ticket/<int:flight_id>/', views.buy_ticket, name='buy_ticket'),
+    path('buy-ticket/<int:flight_id>/seat/', views.buy_ticket_seat, name='buy_ticket_seat'),
+    path('buy-ticket/<int:flight_id>/confirm/', views.buy_ticket_confirm, name='buy_ticket_confirm'),
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('admin-panel/crud/', views.admin_crud, name='admin_crud'),
+    path('admin-panel/get-record/', views.admin_get_record, name='admin_get_record'),
+    path('admin-panel/get-options/', views.admin_get_options, name='admin_get_options'),
+    path('manager-panel/', views.manager_panel, name='manager_panel'),
+    path('manager-panel/crud/', views.manager_crud, name='manager_crud'),
+    path('manager-panel/get-record/', views.manager_get_record, name='manager_get_record'),
+    path('manager-panel/get-options/', views.manager_get_options, name='manager_get_options'),
+    path('reports/', views.reports_view, name='reports'),
+    path('profile/export/<str:format_type>/', views.export_statistics, name='export_statistics'),
+    path('profile/backup/', views.backup_database, name='backup_database'),
+    path('profile/restore/', views.restore_database, name='restore_database'),
+    path('<path:path>', views.page_not_found_catchall),
+]
