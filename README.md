@@ -7,11 +7,11 @@
 ## Как сделать чтобы работало?
 - Повторите предыдущую практическую работу - "[Практическая работа №11 Начало работы с Gitlab](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/tree/gitlab)".
 - Скачайте этот проект, который основан на декабрьской [курсовой](https://github.com/Archive-of-practical-work-for-the-MPT/GreenQuality) 4 курса.
-- Зарегестрируйте runner через ```docker exec -it gitlab-gitlab-runner-1 gitlab-runner register```.
+- Зарегестрируйте runner через ```docker exec -it gitlab-gitlab-runner-1 gitlab-runner register```. В URL пропишите id контейнера Gitlab, а токен скопируйте в Admin/CI-CD/Runners, остальное можете проскипать.
 - Установите библиотеки внутри контейнера runner'а.
 - Создайте репозиторий и загрузите скачанный проект.
 - Pipeline запустится автоматически.
-- Чтобы сделать переадресацию поменяйте файл gitlab.rb, а именно переменные: ```external_url``` и ```nginx["listen_port"]```
+- Чтобы сделать переадресацию поменяйте файл gitlab.rb, а именно переменные: [external_url](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/blob/pipeline/gitlab.rb#L32) и [nginx["listen_port"]](https://github.com/Archive-of-practical-work-for-the-MPT/Homework-Docker/blob/pipeline/gitlab.rb#L1873)
 - Затем ```gitlab-ctl reconfigure```
 
 Перед запуском docker-compose, убедитесь, что у вас для докера установлено около 7Гб+ RAM, иначе он может работать очень медленно, затем запустите:
@@ -31,7 +31,7 @@
 ## Демонстрация
 
 <p align="center">
-      <img src="https://github.com/user-attachments/assets/73a75c6d-dfe0-4ef5-a40a-9a3a1c7e3b49" alt="Демонстрация" width="700">
+      <img src="https://github.com/user-attachments/assets/65a5ba3a-2fe5-43dc-aa86-a4a15011b0c6" alt="Демонстрация" width="700">
 </p>
 
 ## Вывод
