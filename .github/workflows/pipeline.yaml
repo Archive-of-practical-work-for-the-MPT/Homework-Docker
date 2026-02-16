@@ -55,7 +55,6 @@ jobs:
   linter:
     name: Check for sintacsis errors
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: build 
 
     steps:
@@ -82,6 +81,7 @@ jobs:
           echo "Подготовка тестовой среды"
 
       - name: Create sintacsis with flake8
+        continue-on-error: true
         run: |
           echo "Проверка синтаксических ошибок с помощью flake8"
           pip install flake8
@@ -91,7 +91,6 @@ jobs:
   test:
     name: Radon + Secury
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: linter 
 
     steps:
@@ -118,6 +117,7 @@ jobs:
           echo "Подготовка тестовой среды"
 
       - name: Analyze code with radon
+        continue-on-error: true
         run: |
           echo "Анализ качества кода проекта GreenQuality"
           pip install radon mccabe
@@ -128,6 +128,7 @@ jobs:
           echo "Анализ качества кода завершен"
       
       - name: Check security
+        continue-on-error: true
         run: |
           echo "Проверка безопасности кода"
           pip install bandit
