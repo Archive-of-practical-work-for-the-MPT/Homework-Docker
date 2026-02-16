@@ -89,7 +89,7 @@ jobs:
           echo "Проверка синтаксических ошибок завершена"
 
   test:
-    name: Check for sintacsis errors
+    name: Radon + Secury
     runs-on: ubuntu-latest
     continue-on-error: true
     needs: linter 
