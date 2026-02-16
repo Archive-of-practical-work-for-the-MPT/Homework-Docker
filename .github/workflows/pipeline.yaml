@@ -1,0 +1,138 @@
+name: django-check
+
+on:
+  push:
+    branches: [ pipeline-github ] 
+  # pull_request:
+
+# Глобальные переменные для всех jobs
+env:
+  DJANGO_SETTINGS_MODULE: "greenquality.settings"
+  VENV_PATH: ".venv"
+  DB_NAME: "test_greenquality"
+  DB_USER: "postgres"
+  DB_PASSWORD: "postgres"
+  DB_HOST: "localhost"
+  DB_PORT: "5432"
+
+jobs:
+  build:
+    name: Build Django project
+    runs-on: ubuntu-latest
+    steps:
+      # Каждый step открывает новую консоль
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Create venv and install libs
+        run: |
+          # Создание виртуального окружения
+          python3 -m venv .venv
+          source .venv/bin/activate
+          # Обновление pip и установка зависимостей
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Копирование примера .env файла
+          cp .env.example .env
+          # Запуск тестовой базы данных (если используется Docker)
+          echo "Подготовка тестовой среды"
+
+      - name: Check Django migration
+        run: |
+          source .venv/bin/activate
+          echo "Проверка сборки проекта GreenQuality"
+          # Проверка конфигурации Django
+          python3 greenquality/manage.py check
+          # Проверка миграций
+          python3 greenquality/manage.py makemigrations --check --dry-run
+          echo "Проект успешно собран"
+
+  linter:
+    name: Check for sintacsis errors
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: build 
+
+    steps:
+      # Каждый step открывает новую консоль
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Create venv and install libs
+        run: |
+          # Создание виртуального окружения
+          python3 -m venv .venv
+          source .venv/bin/activate
+          # Обновление pip и установка зависимостей
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Копирование примера .env файла
+          cp .env.example .env
+          # Запуск тестовой базы данных (если используется Docker)
+          echo "Подготовка тестовой среды"
+
+      - name: Create sintacsis with flake8
+        run: |
+          echo "Проверка синтаксических ошибок с помощью flake8"
+          pip install flake8
+          python3 -m flake8 greenquality/
+          echo "Проверка синтаксических ошибок завершена"
+
+  test:
+    name: Check for sintacsis errors
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: linter 
+
+    steps:
+      # Каждый step открывает новую консоль
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Create venv and install libs
+        run: |
+          # Создание виртуального окружения
+          python3 -m venv .venv
+          source .venv/bin/activate
+          # Обновление pip и установка зависимостей
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Копирование примера .env файла
+          cp .env.example .env
+          # Запуск тестовой базы данных (если используется Docker)
+          echo "Подготовка тестовой среды"
+
+      - name: Analyze code with radon
+        run: |
+          echo "Анализ качества кода проекта GreenQuality"
+          pip install radon mccabe
+          # Анализ цикломатической сложности
+          python3 -m radon cc greenquality/ -a
+          # Анализ объема кода
+          python3 -m radon raw greenquality/
+          echo "Анализ качества кода завершен"
+      
+      - name: Check security
+        run: |
+          echo "Проверка безопасности кода"
+          pip install bandit
+          # Статический анализ безопасности кода
+          bandit -r greenquality/ -ll
+          echo "Проверка безопасности завершена"
+
+

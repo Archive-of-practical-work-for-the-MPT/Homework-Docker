@@ -1,0 +1,1766 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль | GreenQuality Airlines{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Отображение сообщений об ошибках и успехе -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="message message-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="profile-wrapper">
+        <!-- Боковая панель с информацией о пользователе -->
+        <aside class="profile-sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <div class="avatar-circle">
+                        <span class="avatar-initials">
+                            {% if first_name and last_name %}
+                                {{ first_name|first }}{{ last_name|first }}
+                            {% else %}
+                                {{ email|first|upper }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h2 class="profile-name">
+                        {% if first_name and last_name %}
+                            {{ first_name }} {{ last_name }}
+                        {% else %}
+                            Пользователь
+                        {% endif %}
+                    </h2>
+                    <p class="profile-email">{{ email }}</p>
+                    {% if phone %}
+                        <p class="profile-phone">{{ phone }}</p>
+                    {% endif %}
+                </div>
+                <div class="profile-stats">
+                    {% if is_admin %}
+                        <div class="stat-item">
+                            <span class="stat-value">{{ total_users }}</span>
+                            <span class="stat-label">Пользователей</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">{{ total_airplanes }}</span>
+                            <span class="stat-label">Самолетов</span>
+                        </div>
+                    {% elif is_manager %}
+                        <div class="stat-item">
+                            <span class="stat-value">{{ total_tickets }}</span>
+                            <span class="stat-label">Билетов</span>
+                        </div>
+                    {% else %}
+                        <div class="stat-item">
+                            <span class="stat-value">{{ total_tickets }}</span>
+                            <span class="stat-label">Билетов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">{{ user_payments_30d|default:0|floatformat:0 }}</span>
+                            <span class="stat-label">₽ за 30 дней</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </aside>
+
+        <!-- Основной контент с вкладками -->
+        <main class="profile-main">
+            <div class="profile-tabs">
+                <button class="tab-button active" onclick="switchTab('info', event)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Личная информация
+                </button>
+                {% if is_admin %}
+                    <button class="tab-button" onclick="switchTab('statistics', event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        Статистика
+                    </button>
+                    <button class="tab-button" onclick="switchTab('reports', event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <line x1="10" y1="9" x2="8" y2="9"></line>
+                        </svg>
+                        Отчётность
+                    </button>
+                    <button class="tab-button" onclick="switchTab('backup', event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Восстановление
+                    </button>
+                {% elif is_manager %}
+                    <button class="tab-button" onclick="switchTab('statistics', event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        Статистика
+                    </button>
+                    <button class="tab-button" onclick="switchTab('reports', event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <line x1="10" y1="9" x2="8" y2="9"></line>
+                        </svg>
+                        Отчётность
+                    </button>
+                {% else %}
+                    <button class="tab-button" onclick="switchTab('tickets', event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        История покупок
+                    </button>
+                {% endif %}
+            </div>
+
+            <!-- Вкладка: Личная информация -->
+            <div id="tab-info" class="tab-content active">
+                <div class="content-card">
+                    <h3 class="content-title">Редактирование профиля</h3>
+                    {% if profile_form and profile_form.non_field_errors %}
+                        <div class="profile-form-errors">
+                            {% for err in profile_form.non_field_errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                        </div>
+                    {% endif %}
+                    <form class="profile-form" method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">Имя</label>
+                                <input type="text" id="first_name" name="first_name" value="{{ first_name|default:'' }}" required 
+                                       oninvalid="this.setCustomValidity('Пожалуйста, заполните поле Имя')" 
+                                       oninput="this.setCustomValidity('')" class="{% if profile_form and profile_form.errors.first_name %}input-error{% endif %}">
+                                {% if profile_form and profile_form.errors.first_name %}
+                                    <span class="field-error">{{ profile_form.errors.first_name.0 }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Фамилия</label>
+                                <input type="text" id="last_name" name="last_name" value="{{ last_name|default:'' }}" required 
+                                       oninvalid="this.setCustomValidity('Пожалуйста, заполните поле Фамилия')" 
+                                       oninput="this.setCustomValidity('')" class="{% if profile_form and profile_form.errors.last_name %}input-error{% endif %}">
+                                {% if profile_form and profile_form.errors.last_name %}
+                                    <span class="field-error">{{ profile_form.errors.last_name.0 }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="patronymic">Отчество (необязательно)</label>
+                            <input type="text" id="patronymic" name="patronymic" value="{{ patronymic|default:'' }}" class="{% if profile_form and profile_form.errors.patronymic %}input-error{% endif %}">
+                            {% if profile_form and profile_form.errors.patronymic %}
+                                <span class="field-error">{{ profile_form.errors.patronymic.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="{{ email|default:'' }}" required 
+                                   oninvalid="this.setCustomValidity('Пожалуйста, введите корректный email адрес')" 
+                                   oninput="this.setCustomValidity('')" class="{% if profile_form and profile_form.errors.email %}input-error{% endif %}">
+                            {% if profile_form and profile_form.errors.email %}
+                                <span class="field-error">{{ profile_form.errors.email.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Телефон (необязательно)</label>
+                            <input type="tel" id="phone" name="phone" value="{{ phone|default:'' }}" 
+                                   placeholder="+79991234567" maxlength="20" inputmode="numeric" 
+                                   pattern="\+?[0-9]+" title="Только цифры (в начале допускается +)"
+                                   class="{% if profile_form and profile_form.errors.phone %}input-error{% endif %}">
+                            {% if profile_form and profile_form.errors.phone %}
+                                <span class="field-error">{{ profile_form.errors.phone.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="passport_number">Номер паспорта (необязательно)</label>
+                            <input type="text" id="passport_number" name="passport_number" value="{{ passport_number|default:'' }}" 
+                                   placeholder="1234 567890" maxlength="20" inputmode="numeric"
+                                   pattern="[\d\s]*" title="Только цифры и пробелы"
+                                   class="{% if profile_form and profile_form.errors.passport_number %}input-error{% endif %}">
+                            {% if profile_form and profile_form.errors.passport_number %}
+                                <span class="field-error">{{ profile_form.errors.passport_number.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="birthday">Дата рождения (необязательно)</label>
+                            <input type="text" id="birthday" name="birthday" value="{{ birthday|default:'' }}" 
+                                   placeholder="дд.мм.гггг" pattern="\d{2}\.\d{2}\.\d{4}" 
+                                   oninvalid="this.setCustomValidity('Введите дату в формате дд.мм.гггг')" 
+                                   oninput="this.setCustomValidity('')" class="{% if profile_form and profile_form.errors.birthday %}input-error{% endif %}">
+                            {% if profile_form and profile_form.errors.birthday %}
+                                <span class="field-error">{{ profile_form.errors.birthday.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="submit-btn">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
+
+            {% if is_admin %}
+                <!-- Вкладка: Статистика (для администратора) -->
+                <div id="tab-statistics" class="tab-content" style="display: none;">
+                    <div class="content-card">
+                        <h3 class="content-title">Статистика системы</h3>
+                        
+                        <!-- Статистика по пользователям -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Пользователи</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">👥</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_users }}</div>
+                                        <div class="stat-description">Всего пользователей</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">📧</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_accounts }}</div>
+                                        <div class="stat-description">Всего аккаунтов</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">🎫</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ users_with_tickets }}</div>
+                                        <div class="stat-description">Пользователей с билетами</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Статистика по самолетам -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Самолеты</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">✈️</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_airplanes }}</div>
+                                        <div class="stat-description">Всего самолетов</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">💺</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_capacity }}</div>
+                                        <div class="stat-description">Общая вместимость</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Статистика по рейсам -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Рейсы</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">🛫</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_flights }}</div>
+                                        <div class="stat-description">Всего рейсов</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">📅</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ scheduled_flights }}</div>
+                                        <div class="stat-description">Запланировано</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">✅</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ completed_flights }}</div>
+                                        <div class="stat-description">Выполнено</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">❌</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ cancelled_flights }}</div>
+                                        <div class="stat-description">Отменено</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Статистика по билетам -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Билеты</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">🎟️</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_tickets }}</div>
+                                        <div class="stat-description">Всего билетов</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">💳</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ paid_tickets }}</div>
+                                        <div class="stat-description">Оплачено</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">📋</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ booked_tickets }}</div>
+                                        <div class="stat-description">Забронировано</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Статистика по платежам -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Финансы</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">💰</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_revenue|floatformat:0 }} ₽</div>
+                                        <div class="stat-description">Общая выручка</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">💵</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ recent_revenue|floatformat:0 }} ₽</div>
+                                        <div class="stat-description">За последние 30 дней</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">📊</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ total_payments }}</div>
+                                        <div class="stat-description">Всего платежей</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">✅</div>
+                                    <div class="stat-content">
+                                        <div class="stat-number">{{ completed_payments }}</div>
+                                        <div class="stat-description">Завершено</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Популярные направления -->
+                        {% if popular_routes %}
+                            <div class="statistics-section">
+                                <h4 class="section-title">Популярные направления</h4>
+                                <div class="routes-list">
+                                    {% for route in popular_routes %}
+                                        <div class="route-item">
+                                            <span class="route-path">{{ route.departure_airport_id__city }} → {{ route.arrival_airport_id__city }}</span>
+                                            <span class="route-count">{{ route.ticket_count }} билетов</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Вкладка: Восстановление (бэкап/рестор) -->
+                <div id="tab-backup" class="tab-content" style="display: none;">
+                    <div class="content-card">
+                        <h3 class="content-title">Резервное копирование базы данных</h3>
+                        <p class="backup-description">Создайте резервную копию базы данных или восстановите её из ранее сохранённого файла.</p>
+                        
+                        <div class="backup-section">
+                            <h4 class="section-title">Создать резервную копию</h4>
+                            <p class="backup-hint">Скачайте полную копию базы данных в формате SQL. Файл можно использовать для восстановления.</p>
+                            <a href="{% url 'backup_database' %}" class="backup-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Скачать резервную копию
+                            </a>
+                        </div>
+
+                        <div class="backup-section restore-section">
+                            <h4 class="section-title">Восстановить из резервной копии</h4>
+                            <p class="backup-warning">Внимание: восстановление заменит все текущие данные в базе. Убедитесь, что выбран правильный файл.</p>
+                            <form method="post" action="{% url 'restore_database' %}" enctype="multipart/form-data" class="restore-form" onsubmit="return confirm('Вы уверены? Все текущие данные будут заменены.');">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="backup_file">Файл резервной копии (.sql)</label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="backup_file" name="backup_file" accept=".sql" required class="file-input-native">
+                                        <span class="file-input-btn">Выберите файл</span>
+                                        <span class="file-input-filename">Файл не выбран</span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="restore-btn">Восстановить базу данных</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Отчётность (администратор) -->
+                <div id="tab-reports" class="tab-content" style="display: none;">
+                    <div class="profile-reports">
+                        <section class="profile-report-card">
+                            <h3 class="profile-report-title"><span class="profile-report-icon">✈️</span> Отчёт по рейсам</h3>
+                            <div class="profile-report-table-wrap">
+                                <table class="profile-report-table">
+                                    <thead><tr><th>ID</th><th>Вылет</th><th>Прилёт</th><th>Статус</th><th>Откуда</th><th>Куда</th><th>Мест</th><th>Занято</th><th>Выручка (₽)</th></tr></thead>
+                                    <tbody>
+                                        {% for row in flights_report %}<tr><td>{{ row.id_flight }}</td><td>{{ row.departure_time|date:"d.m.Y H:i" }}</td><td>{{ row.arrival_time|date:"d.m.Y H:i" }}</td><td>{{ row.flight_status }}</td><td>{{ row.departure_city }} ({{ row.departure_airport_code }})</td><td>{{ row.arrival_city }} ({{ row.arrival_airport_code }})</td><td>{{ row.total_seats }}</td><td>{{ row.occupied_seats }}</td><td class="profile-report-money">{{ row.revenue|floatformat:0 }}</td></tr>{% empty %}<tr><td colspan="9" class="profile-report-empty">Нет данных</td></tr>{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section class="profile-report-card">
+                            <h3 class="profile-report-title"><span class="profile-report-icon">🏢</span> Выручка по аэропортам</h3>
+                            <div class="profile-report-table-wrap">
+                                <table class="profile-report-table">
+                                    <thead><tr><th>Код</th><th>Аэропорт</th><th>Город</th><th>Страна</th><th>Вылеты (₽)</th><th>Прилёты (₽)</th><th>Всего (₽)</th></tr></thead>
+                                    <tbody>
+                                        {% for row in airports_report %}<tr><td>{{ row.id_airport }}</td><td>{{ row.airport_name }}</td><td>{{ row.city }}</td><td>{{ row.country }}</td><td class="profile-report-money">{{ row.revenue_departures|floatformat:0 }}</td><td class="profile-report-money">{{ row.revenue_arrivals|floatformat:0 }}</td><td class="profile-report-money profile-report-total">{{ row.revenue_total|floatformat:0 }}</td></tr>{% empty %}<tr><td colspan="7" class="profile-report-empty">Нет данных</td></tr>{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        {% if show_audit %}
+                        <section class="profile-report-card">
+                            <h3 class="profile-report-title"><span class="profile-report-icon">📋</span> Журнал аудита</h3>
+                            <div class="profile-report-table-wrap">
+                                <table class="profile-report-table">
+                                    <thead><tr><th>Таблица</th><th>Операция</th><th>Количество</th><th>Первая</th><th>Последняя</th></tr></thead>
+                                    <tbody>
+                                        {% for row in audit_report %}<tr><td>{{ row.table_name }}</td><td><span class="profile-report-op profile-report-op-{{ row.operation|lower }}">{{ row.operation }}</span></td><td>{{ row.operations_count }}</td><td>{{ row.first_at|date:"d.m.Y H:i" }}</td><td>{{ row.last_at|date:"d.m.Y H:i" }}</td></tr>{% empty %}<tr><td colspan="5" class="profile-report-empty">Нет данных</td></tr>{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        {% endif %}
+                    </div>
+                </div>
+            {% elif is_manager %}
+                <!-- Вкладка: Статистика (для менеджера) -->
+                <div id="tab-statistics" class="tab-content" style="display: none;">
+                    <div class="content-card">
+                        <div class="statistics-header">
+                            <h3 class="content-title">Статистика</h3>
+                            <div class="export-buttons">
+                                <a href="{% url 'export_statistics' 'csv' %}" class="export-btn export-csv">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Экспорт CSV
+                                </a>
+                                <a href="{% url 'export_statistics' 'pdf' %}" class="export-btn export-pdf">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                    Экспорт PDF
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Круговая диаграмма статусов билетов -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Статусы билетов</h4>
+                            <div class="chart-container">
+                                <canvas id="ticketStatusChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Bar диаграмма выручки по месяцам -->
+                        <div class="statistics-section">
+                            <h4 class="section-title">Выручка по месяцам</h4>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Отчётность (менеджер) -->
+                <div id="tab-reports" class="tab-content" style="display: none;">
+                    <div class="profile-reports">
+                        <section class="profile-report-card">
+                            <h3 class="profile-report-title"><span class="profile-report-icon">✈️</span> Отчёт по рейсам</h3>
+                            <div class="profile-report-table-wrap">
+                                <table class="profile-report-table">
+                                    <thead><tr><th>ID</th><th>Вылет</th><th>Прилёт</th><th>Статус</th><th>Откуда</th><th>Куда</th><th>Мест</th><th>Занято</th><th>Выручка (₽)</th></tr></thead>
+                                    <tbody>
+                                        {% for row in flights_report %}<tr><td>{{ row.id_flight }}</td><td>{{ row.departure_time|date:"d.m.Y H:i" }}</td><td>{{ row.arrival_time|date:"d.m.Y H:i" }}</td><td>{{ row.flight_status }}</td><td>{{ row.departure_city }} ({{ row.departure_airport_code }})</td><td>{{ row.arrival_city }} ({{ row.arrival_airport_code }})</td><td>{{ row.total_seats }}</td><td>{{ row.occupied_seats }}</td><td class="profile-report-money">{{ row.revenue|floatformat:0 }}</td></tr>{% empty %}<tr><td colspan="9" class="profile-report-empty">Нет данных</td></tr>{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section class="profile-report-card">
+                            <h3 class="profile-report-title"><span class="profile-report-icon">🏢</span> Выручка по аэропортам</h3>
+                            <div class="profile-report-table-wrap">
+                                <table class="profile-report-table">
+                                    <thead><tr><th>Код</th><th>Аэропорт</th><th>Город</th><th>Страна</th><th>Вылеты (₽)</th><th>Прилёты (₽)</th><th>Всего (₽)</th></tr></thead>
+                                    <tbody>
+                                        {% for row in airports_report %}<tr><td>{{ row.id_airport }}</td><td>{{ row.airport_name }}</td><td>{{ row.city }}</td><td>{{ row.country }}</td><td class="profile-report-money">{{ row.revenue_departures|floatformat:0 }}</td><td class="profile-report-money">{{ row.revenue_arrivals|floatformat:0 }}</td><td class="profile-report-money profile-report-total">{{ row.revenue_total|floatformat:0 }}</td></tr>{% empty %}<tr><td colspan="7" class="profile-report-empty">Нет данных</td></tr>{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Вкладка: История покупок (для обычных пользователей) -->
+                <div id="tab-tickets" class="tab-content">
+                    <div class="content-card">
+                        <h3 class="content-title">История покупок билетов</h3>
+                        
+                        {% if tickets %}
+                            <div class="tickets-list">
+                                {% for item in tickets %}
+                                    <div class="ticket-card">
+                                        <div class="ticket-header">
+                                            <div class="ticket-route">
+                                                <div class="route-point">
+                                                    <span class="airport-code">{{ item.flight.departure_airport_id.id_airport }}</span>
+                                                    <span class="airport-name">{{ item.flight.departure_airport_id.city }}</span>
+                                                </div>
+                                                <div class="route-arrow">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                                    </svg>
+                                                </div>
+                                                <div class="route-point">
+                                                    <span class="airport-code">{{ item.flight.arrival_airport_id.id_airport }}</span>
+                                                    <span class="airport-name">{{ item.flight.arrival_airport_id.city }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="ticket-status status-{{ item.ticket.status|lower }}">
+                                                {{ item.ticket.get_status_display }}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="ticket-body">
+                                            <div class="ticket-info-row">
+                                                <div class="info-item">
+                                                    <span class="info-label">Дата вылета</span>
+                                                    <span class="info-value">{{ item.flight.departure_time|date:"d.m.Y H:i" }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="info-label">Дата прилета</span>
+                                                    <span class="info-value">{{ item.flight.arrival_time|date:"d.m.Y H:i" }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="ticket-info-row">
+                                                <div class="info-item">
+                                                    <span class="info-label">Класс</span>
+                                                    <span class="info-value">{{ item.class_name }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="info-label">Место</span>
+                                                    <span class="info-value">{{ item.ticket.seat_number }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="info-label">Пассажир</span>
+                                                    <span class="info-value">{{ item.passenger.first_name }} {{ item.passenger.last_name }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="ticket-footer">
+                                                <div class="ticket-price">
+                                                    <span class="price-label">Стоимость</span>
+                                                    <span class="price-value">{{ item.ticket.price }} ₽</span>
+                                                </div>
+                                                <div class="ticket-payment-info">
+                                                    <span class="payment-date">Оплачено: {{ item.payment.payment_date|date:"d.m.Y H:i" }}</span>
+                                                    <span class="payment-method">{{ item.payment.get_payment_method_display }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="empty-state">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 12l2 2 4-4"></path>
+                                    <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"></path>
+                                    <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"></path>
+                                    <path d="M13 12h3a2 2 0 0 1 2 2v1"></path>
+                                    <path d="M5 12H2a2 2 0 0 0-2 2v1"></path>
+                                </svg>
+                                <h3>У вас пока нет покупок</h3>
+                                <p>После покупки билетов они появятся здесь</p>
+                                <a href="{% url 'flights' %}" class="empty-state-btn">Посмотреть рейсы</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-container {
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    transition: background 0.3s ease;
+}
+
+.messages-container {
+    max-width: 1400px;
+    margin: 0 auto 30px;
+}
+
+.message {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.profile-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+}
+
+.profile-sidebar {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+.profile-card {
+    background: var(--bg-color, white);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px var(--shadow-color, rgba(0, 0, 0, 0.1));
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.profile-avatar {
+    margin-bottom: 20px;
+}
+
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0bda51 0%, #08a53d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 5px 15px rgba(11, 218, 81, 0.3);
+}
+
+.avatar-initials {
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.profile-name {
+    color: var(--text-secondary, #2c3e50);
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.profile-email {
+    color: var(--text-muted, #7f8c8d);
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.profile-phone {
+    color: var(--text-muted, #7f8c8d);
+    font-size: 14px;
+}
+
+.profile-stats {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color, #e1e8ed);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0bda51;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: var(--text-muted, #7f8c8d);
+    font-size: 14px;
+}
+
+.profile-main {
+    background: var(--bg-color, white);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--shadow-color, rgba(0, 0, 0, 0.1));
+    overflow: hidden;
+    transition: background 0.3s ease;
+}
+
+.profile-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color, #e1e8ed);
+    background: var(--bg-secondary, #f8f9fa);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted, #7f8c8d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-button:hover {
+    color: #0bda51;
+    background: rgba(11, 218, 81, 0.05);
+}
+
+.tab-button.active {
+    color: #0bda51;
+    background: var(--bg-color, white);
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #0bda51;
+}
+
+.tab-content {
+    display: none;
+    padding: 40px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Вкладка «Отчётность» */
+.profile-reports {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.profile-report-card {
+    background: var(--bg-secondary, #f8f9fa);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-color, #e9ecef);
+}
+
+.profile-report-title {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-secondary, #2c3e50);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-report-icon {
+    font-size: 22px;
+}
+
+.profile-report-table-wrap {
+    overflow-x: auto;
+}
+
+.profile-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.profile-report-table thead {
+    background: linear-gradient(135deg, #0bda51 0%, #08a53d 100%);
+    color: #fff;
+}
+
+.profile-report-table th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.profile-report-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color, #e9ecef);
+    color: var(--text-secondary, #2c3e50);
+}
+
+.profile-report-table tbody tr:hover {
+    background: rgba(11, 218, 81, 0.06);
+}
+
+.profile-report-money {
+    font-weight: 600;
+}
+
+.profile-report-total {
+    color: #08a53d;
+    font-weight: 700;
+}
+
+.profile-report-op {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.profile-report-op-insert { background: #e8f5e9; color: #2e7d32; }
+.profile-report-op-update { background: #e3f2fd; color: #1976d2; }
+.profile-report-op-delete { background: #ffebee; color: #c62828; }
+
+.profile-report-empty {
+    text-align: center;
+    color: var(--text-muted, #7f8c8d);
+    padding: 24px !important;
+    font-style: italic;
+}
+
+.content-card {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content-title {
+    color: var(--text-secondary, #2c3e50);
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-secondary, #2c3e50);
+    font-size: 14px;
+}
+
+.form-group input {
+    padding: 15px;
+    border: 2px solid var(--border-color, #e1e8ed);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: var(--bg-color, white);
+    color: var(--text-color, #2c3e50);
+}
+
+.form-group input:focus {
+    border-color: #0bda51;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11, 218, 81, 0.2);
+}
+
+.form-group input.input-error {
+    border-color: #e74c3c;
+}
+
+.form-group .field-error,
+.profile-form-errors .form-error {
+    color: #c0392b;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.profile-form-errors {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #fff5f5;
+    border: 1px solid #e74c3c;
+    border-radius: 8px;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #0bda51, #08a53d);
+    color: #ffffff;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(11, 218, 81, 0.3);
+    align-self: flex-start;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(11, 218, 81, 0.4);
+}
+
+/* Стили для билетов */
+.tickets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ticket-card {
+    background: var(--bg-secondary, #f8f9fa);
+    border-radius: 16px;
+    padding: 25px;
+    border: 2px solid var(--border-color, #e1e8ed);
+    transition: all 0.3s ease;
+}
+
+.ticket-card:hover {
+    border-color: #0bda51;
+    box-shadow: 0 5px 15px rgba(11, 218, 81, 0.2);
+    transform: translateY(-2px);
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color, #e1e8ed);
+}
+
+.ticket-route {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.route-point {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.airport-code {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0bda51;
+    margin-bottom: 5px;
+}
+
+.airport-name {
+    font-size: 14px;
+    color: var(--text-muted, #7f8c8d);
+}
+
+.route-arrow {
+    color: #0bda51;
+}
+
+.ticket-status {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.status-booked {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-paid {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.status-checked_in {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-cancelled {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.ticket-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ticket-info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-label {
+    font-size: 12px;
+    color: var(--text-muted, #7f8c8d);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.info-value {
+    font-size: 16px;
+    color: var(--text-secondary, #2c3e50);
+    font-weight: 600;
+}
+
+.ticket-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color, #e1e8ed);
+}
+
+.ticket-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 12px;
+    color: var(--text-muted, #7f8c8d);
+    margin-bottom: 5px;
+}
+
+.price-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0bda51;
+}
+
+.ticket-payment-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.payment-date {
+    font-size: 14px;
+    color: var(--text-muted, #7f8c8d);
+}
+
+.payment-method {
+    font-size: 14px;
+    color: var(--text-secondary, #2c3e50);
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted, #7f8c8d);
+}
+
+.empty-state svg {
+    margin-bottom: 20px;
+    color: var(--text-muted, #bdc3c7);
+}
+
+.empty-state h3 {
+    color: var(--text-secondary, #2c3e50);
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.empty-state p {
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.empty-state-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #0bda51, #08a53d);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.empty-state-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(11, 218, 81, 0.3);
+}
+
+@media (max-width: 1024px) {
+    .profile-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .ticket-info-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .ticket-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .ticket-payment-info {
+        align-items: flex-start;
+    }
+    
+    .tab-content {
+        padding: 20px;
+    }
+}
+
+/* Стили для статистики */
+.statistics-section {
+    margin-bottom: 40px;
+}
+
+.statistics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color, #e1e8ed);
+}
+
+.export-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid;
+}
+
+.export-csv {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.export-csv:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.export-pdf {
+    background: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
+}
+
+.export-pdf:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--bg-color, white);
+    border-radius: 15px;
+    box-shadow: 0 2px 10px var(--shadow-color, rgba(0, 0, 0, 0.05));
+    transition: background 0.3s ease;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-secondary, #2c3e50);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0bda51;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--bg-secondary, #f8f9fa) 0%, var(--bg-color, #ffffff) 100%);
+    border: 2px solid var(--border-color, #e1e8ed);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(11, 218, 81, 0.2);
+    border-color: #0bda51;
+}
+
+.stat-icon {
+    font-size: 36px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0bda51 0%, #08a53d 100%);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-secondary, #2c3e50);
+    margin-bottom: 5px;
+}
+
+.stat-description {
+    font-size: 14px;
+    color: var(--text-muted, #7f8c8d);
+    line-height: 1.4;
+}
+
+.routes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.route-item {
+    background: var(--bg-secondary, #f8f9fa);
+    border: 2px solid var(--border-color, #e1e8ed);
+    border-radius: 10px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.route-item:hover {
+    border-color: #0bda51;
+    background: var(--bg-secondary, #f0fff4);
+}
+
+.route-path {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary, #2c3e50);
+}
+
+.route-count {
+    font-size: 14px;
+    color: #0bda51;
+    font-weight: 600;
+    background: #e8f5e9;
+    padding: 5px 12px;
+    border-radius: 8px;
+}
+
+/* Стили для вкладки Восстановление */
+.backup-description {
+    color: var(--text-muted, #7f8c8d);
+    margin-bottom: 30px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.backup-section {
+    margin-bottom: 40px;
+    padding: 25px;
+    background: var(--bg-secondary, #f8f9fa);
+    border-radius: 15px;
+    border: 2px solid var(--border-color, #e1e8ed);
+}
+
+.backup-section.restore-section {
+    border-color: var(--restore-border, #e6d9b8);
+    background: var(--restore-bg, #fffbf0);
+}
+
+.backup-hint, .backup-warning {
+    font-size: 14px;
+    color: var(--text-muted, #7f8c8d);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.backup-warning {
+    color: var(--restore-warning-text, #856404);
+    font-weight: 500;
+}
+
+[data-theme="dark"] .backup-section.restore-section {
+    border-color: rgba(230, 162, 60, 0.4);
+    background: rgba(230, 162, 60, 0.08);
+}
+
+[data-theme="dark"] .backup-warning {
+    color: #e6a23c;
+}
+
+.backup-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #0bda51, #08a53d);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(11, 218, 81, 0.3);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.backup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(11, 218, 81, 0.4);
+    color: white;
+}
+
+.restore-form .form-group {
+    margin-bottom: 20px;
+}
+
+.file-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 46px;
+}
+
+.file-input-native {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.file-input-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background: linear-gradient(45deg, #0bda51, #08a53d);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    pointer-events: none;
+    box-shadow: 0 4px 14px rgba(11, 218, 81, 0.3);
+    transition: box-shadow 0.2s ease;
+}
+
+.file-input-wrapper:focus-within .file-input-btn {
+    box-shadow: 0 0 0 3px rgba(11, 218, 81, 0.35);
+}
+
+.file-input-filename {
+    color: var(--text-muted);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.restore-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    font-size: 16px;
+}
+
+.restore-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function switchTab(tabName, event) {
+    event = event || window.event;
+    
+    // Скрываем все вкладки
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+        tab.style.display = 'none';
+    });
+    
+    // Убираем активный класс со всех кнопок
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Показываем выбранную вкладку
+    const selectedTab = document.getElementById('tab-' + tabName);
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+        selectedTab.style.display = 'block';
+    }
+    
+    // Добавляем активный класс к выбранной кнопке
+    if (event && event.target) {
+        const button = event.target.closest('.tab-button');
+        if (button) {
+            button.classList.add('active');
+        } else {
+            // Если не нашли через closest, ищем по onclick
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + tabName + "'")) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    }
+}
+
+// Открыть вкладку из URL (?tab=reports и т.д.)
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    if (tabParam) {
+        const tabEl = document.getElementById('tab-' + tabParam);
+        if (tabEl) {
+            const btn = document.querySelector(".tab-button[onclick*=\"switchTab('" + tabParam + "'");
+            if (btn) {
+                btn.click();
+            }
+        }
+    }
+
+    // Телефон: только цифры и один + в начале
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let v = e.target.value;
+            if (v.startsWith('+')) {
+                v = '+' + v.slice(1).replace(/\D/g, '');
+            } else {
+                v = v.replace(/\D/g, '');
+            }
+            e.target.value = v;
+        });
+    }
+    // Номер паспорта: только цифры и пробелы
+    const passportInput = document.getElementById('passport_number');
+    if (passportInput) {
+        passportInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^\d\s]/g, '');
+        });
+    }
+    // Имя выбранного файла в форме восстановления
+    const backupFileInput = document.getElementById('backup_file');
+    const fileInputFilename = document.querySelector('.file-input-filename');
+    if (backupFileInput && fileInputFilename) {
+        backupFileInput.addEventListener('change', function() {
+            fileInputFilename.textContent = this.files && this.files[0] ? this.files[0].name : 'Файл не выбран';
+        });
+    }
+
+    const birthdayInput = document.getElementById('birthday');
+    
+    // Маска для ввода даты в формате дд.мм.гггг
+    if (birthdayInput) {
+        birthdayInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Удаляем все нецифровые символы
+            
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '.' + value.substring(2);
+            }
+            if (value.length >= 5) {
+                value = value.substring(0, 5) + '.' + value.substring(5, 9);
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Валидация даты
+        birthdayInput.addEventListener('blur', function(e) {
+            const value = e.target.value;
+            if (value && value.length === 10) {
+                const parts = value.split('.');
+                if (parts.length === 3) {
+                    const day = parseInt(parts[0], 10);
+                    const month = parseInt(parts[1], 10);
+                    const year = parseInt(parts[2], 10);
+                    
+                    // Проверка корректности даты
+                    const date = new Date(year, month - 1, day);
+                    if (date.getDate() !== day || date.getMonth() !== month - 1 || date.getFullYear() !== year) {
+                        e.target.setCustomValidity('Введите корректную дату');
+                    } else {
+                        e.target.setCustomValidity('');
+                    }
+                }
+            }
+        });
+    }
+});
+
+{% if is_manager %}
+// Инициализация диаграмм для менеджера
+document.addEventListener('DOMContentLoaded', function() {
+    // Данные для круговой диаграммы статусов билетов
+    const ticketStatusData = {{ ticket_status_data|safe }};
+    const revenueData = {{ revenue_data|safe }};
+    
+    // Круговая диаграмма статусов билетов
+    const ticketStatusCtx = document.getElementById('ticketStatusChart');
+    if (ticketStatusCtx) {
+        new Chart(ticketStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ticketStatusData.labels,
+                datasets: [{
+                    data: ticketStatusData.data,
+                    backgroundColor: ticketStatusData.colors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Bar диаграмма выручки по месяцам
+    const revenueCtx = document.getElementById('revenueChart');
+    if (revenueCtx) {
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: revenueData.labels,
+                datasets: [{
+                    label: 'Выручка (руб.)',
+                    data: revenueData.data,
+                    backgroundColor: 'rgba(11, 218, 81, 0.8)',
+                    borderColor: 'rgba(11, 218, 81, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Выручка: ' + context.parsed.y.toLocaleString('ru-RU') + ' ₽';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('ru-RU') + ' ₽';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+{% endif %}
+</script>
+
+{% if is_manager %}
+<!-- Chart.js библиотека -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endif %}
+{% endblock %}

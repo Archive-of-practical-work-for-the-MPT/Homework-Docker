@@ -1,0 +1,21 @@
+concurrent = 1
+check_interval = 0
+connection_max_age = "15m0s"
+shutdown_timeout = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "my runner"
+  url = "http://96506bb6d7df/"
+  id = 4
+  token = "glrtr-s7gbzDSDgx2L4Ecwb7ss"
+  token_obtained_at = 2026-02-13T23:11:20Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "shell"
+  [runners.cache]
+    MaxUploadedArchiveSize = 0
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
